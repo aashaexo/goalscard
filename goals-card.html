@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My 2026 Goals</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a0a0f;
+      padding: 20px;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    /* Stars */
+    .stars {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    /* Card */
+    .card {
+      width: 100%;
+      max-width: 650px;
+      background: linear-gradient(135deg, rgba(20,25,35,0.95), rgba(15,20,30,0.9));
+      border-radius: 20px;
+      padding: 36px 40px;
+      border: 1px solid rgba(6,182,212,0.15);
+      box-shadow: 0 0 60px rgba(6,182,212,0.08);
+      display: flex;
+      gap: 36px;
+      position: relative;
+    }
+
+    /* Left side */
+    .content {
+      flex: 1;
+    }
+
+    .title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      font-weight: 500;
+      color: white;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .underline {
+      height: 2px;
+      width: 180px;
+      background: linear-gradient(90deg, #06b6d4, transparent);
+      box-shadow: 0 0 10px rgba(6,182,212,0.5);
+      margin-bottom: 24px;
+    }
+
+    /* Goals */
+    .goals {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .goal {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .goal-dash {
+      color: rgba(255,255,255,0.3);
+      font-size: 18px;
+    }
+
+    .goal-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: rgba(255,255,255,0.7);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 17px;
+      padding: 6px 0;
+      border-bottom: 1px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .goal-input:focus {
+      color: white;
+      border-bottom-color: rgba(6,182,212,0.4);
+    }
+
+    .goal-input::placeholder {
+      color: rgba(255,255,255,0.3);
+    }
+
+    .goal-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .check-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1px solid rgba(6,182,212,0.3);
+      background: rgba(6,182,212,0.1);
+      color: rgba(6,182,212,0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all 0.3s;
+      font-family: sans-serif;
+    }
+
+    .check-btn:hover {
+      background: rgba(6,182,212,0.2);
+      border-color: rgba(6,182,212,0.5);
+      color: rgba(6,182,212,0.9);
+    }
+
+    .goal.saved .goal-input {
+      color: rgba(6,182,212,0.8);
+    }
+
+    .goal.saved .check-btn {
+      background: rgba(6,182,212,0.3);
+      border-color: rgba(6,182,212,0.6);
+      color: rgba(6,182,212,1);
+    }
+
+    .delete-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,100,100,0.3);
+      background: rgba(255,100,100,0.1);
+      color: rgba(255,100,100,0.6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all 0.3s;
+      font-family: sans-serif;
+    }
+
+    .delete-btn:hover {
+      background: rgba(255,100,100,0.2);
+      border-color: rgba(255,100,100,0.5);
+      color: rgba(255,100,100,0.9);
+    }
+
+    /* Save card button - outside card */
+    .save-card-btn {
+      margin-top: 20px;
+      padding: 14px 48px;
+      background: transparent;
+      border: 1px solid rgba(6,182,212,0.4);
+      border-radius: 30px;
+      color: #06b6d4;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .save-card-btn:hover {
+      background: rgba(6,182,212,0.1);
+      box-shadow: 0 0 25px rgba(6,182,212,0.2);
+      border-color: rgba(6,182,212,0.6);
+    }
+
+    /* Container for card + button */
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Add goal */
+    .add-goal {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(6,182,212,0.5);
+      cursor: pointer;
+      margin-top: 12px;
+      font-size: 15px;
+      transition: color 0.3s;
+      background: none;
+      border: none;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .add-goal:hover {
+      color: rgba(6,182,212,0.8);
+    }
+
+    /* Right side - Image */
+    .image-container {
+      width: 180px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .image-box {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 14px;
+      border: 1.5px solid rgba(6,182,212,0.35);
+      box-shadow: 0 0 25px rgba(6,182,212,0.15);
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(145deg, rgba(6,182,212,0.08), rgba(6,182,212,0.03));
+    }
+
+    .image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .image-box.has-image img {
+      display: block;
+    }
+
+    .upload-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      gap: 8px;
+    }
+
+    .image-box.has-image .upload-label {
+      display: none;
+    }
+
+    .upload-icon {
+      width: 32px;
+      height: 32px;
+      stroke: rgba(6,182,212,0.35);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .upload-text {
+      color: rgba(6,182,212,0.35);
+      font-size: 13px;
+    }
+
+    .image-delete {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(239,68,68,0.8);
+      border: none;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    .image-box.has-image .image-delete {
+      display: flex;
+    }
+
+    .image-delete:hover {
+      background: rgba(239,68,68,1);
+    }
+
+    /* Saved state - hide all interactive elements */
+    .card.saved .goal-buttons,
+    .card.saved .add-goal,
+    .card.saved .image-delete,
+    .card.saved .upload-label {
+      display: none !important;
+    }
+
+    .card.saved .goal-input {
+      cursor: default;
+    }
+
+    #file-input {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Stars background -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Wrapper for card + button -->
+  <div class="wrapper">
+    <!-- Card -->
+    <div class="card" id="card">
+      <!-- Left content -->
+      <div class="content">
+        <h1 class="title">MY GOALS FOR 2026</h1>
+        <div class="underline"></div>
+
+        <div class="goals" id="goals">
+          <div class="goal">
+            <span class="goal-dash">–</span>
+            <input type="text" class="goal-input" placeholder="Enter your goal..." value="Goal 1">
+            <div class="goal-buttons">
+              <button class="check-btn" onclick="saveGoal(this)">✓</button>
+              <button class="delete-btn" onclick="deleteGoal(this)">×</button>
+            </div>
+          </div>
+          <div class="goal">
+            <span class="goal-dash">–</span>
+            <input type="text" class="goal-input" placeholder="Enter your goal..." value="Goal 2">
+            <div class="goal-buttons">
+              <button class="check-btn" onclick="saveGoal(this)">✓</button>
+              <button class="delete-btn" onclick="deleteGoal(this)">×</button>
+            </div>
+          </div>
+          <div class="goal">
+            <span class="goal-dash">–</span>
+            <input type="text" class="goal-input" placeholder="Enter your goal..." value="Goal 3">
+            <div class="goal-buttons">
+              <button class="check-btn" onclick="saveGoal(this)">✓</button>
+              <button class="delete-btn" onclick="deleteGoal(this)">×</button>
+            </div>
+          </div>
+          <div class="goal">
+            <span class="goal-dash">–</span>
+            <input type="text" class="goal-input" placeholder="Enter your goal..." value="Goal 4">
+            <div class="goal-buttons">
+              <button class="check-btn" onclick="saveGoal(this)">✓</button>
+              <button class="delete-btn" onclick="deleteGoal(this)">×</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="add-goal" onclick="addGoal()">+ Add Goal</button>
+      </div>
+
+      <!-- Right image -->
+      <div class="image-container">
+        <div class="image-box" id="image-box">
+          <img id="preview" src="" alt="Profile">
+          <label class="upload-label" for="file-input">
+            <svg class="upload-icon" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+            </svg>
+            <span class="upload-text">Upload image</span>
+          </label>
+          <input type="file" id="file-input" accept="image/*" onchange="uploadImage(event)">
+          <button class="image-delete" onclick="deleteImage()">×</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save button outside card -->
+    <button class="save-card-btn" onclick="saveCard()">SAVE CARD</button>
+  </div>
+
+  <script>
+    // Generate stars
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 60; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.opacity = Math.random() * 0.5 + 0.2;
+      star.style.width = Math.random() * 2 + 1 + 'px';
+      star.style.height = star.style.width;
+      starsContainer.appendChild(star);
+    }
+
+    // Add goal
+    function addGoal() {
+      const goals = document.getElementById('goals');
+      const div = document.createElement('div');
+      div.className = 'goal';
+      div.innerHTML = `
+        <span class="goal-dash">–</span>
+        <input type="text" class="goal-input" placeholder="Enter your goal...">
+        <div class="goal-buttons">
+          <button class="check-btn" onclick="saveGoal(this)">✓</button>
+          <button class="delete-btn" onclick="deleteGoal(this)">×</button>
+        </div>
+      `;
+      goals.appendChild(div);
+      div.querySelector('input').focus();
+    }
+
+    // Save individual goal
+    function saveGoal(btn) {
+      const goal = btn.closest('.goal');
+      goal.classList.add('saved');
+    }
+
+    // Delete goal
+    function deleteGoal(btn) {
+      btn.closest('.goal').remove();
+    }
+
+    // Save card as image
+    function saveCard() {
+      const card = document.getElementById('card');
+      const saveBtn = document.querySelector('.save-card-btn');
+      
+      // Add saved class to hide all interactive elements
+      card.classList.add('saved');
+      saveBtn.style.display = 'none';
+      
+      // Make inputs readonly
+      const inputs = card.querySelectorAll('.goal-input');
+      inputs.forEach(input => {
+        input.readOnly = true;
+      });
+      
+      // Use html2canvas to capture and download
+      html2canvas(card, {
+        backgroundColor: '#0a0a0f',
+        scale: 2
+      }).then(canvas => {
+        // Download
+        const link = document.createElement('a');
+        link.download = 'my-2026-goals.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    // Upload image
+    function uploadImage(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          document.getElementById('preview').src = event.target.result;
+          document.getElementById('image-box').classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Delete image
+    function deleteImage() {
+      document.getElementById('preview').src = '';
+      document.getElementById('image-box').classList.remove('has-image');
+      document.getElementById('file-input').value = '';
+    }
+  </script>
+</body>
+</html>
